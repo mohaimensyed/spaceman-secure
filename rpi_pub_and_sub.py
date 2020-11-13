@@ -7,6 +7,19 @@ import time
 import grovepi
 from grovepi import *
 from grove_rgb_lcd import *
+import threading 
+
+lock = threading.Lock()
+
+def protect(fn):
+    with lock:
+        return fn()
+
+for BUS in [grovepi.bus,grove_rgb_lcd.bus]:
+    for k in dir(BUS):
+        if sum(map(lambda x: x in k,['read','write','i2c'])):
+            fn = BUS.__getattribute__(k)
+            BUS.__setattr__(k,fn)
 
 button = 6
 ultrasonic_ranger = 3
