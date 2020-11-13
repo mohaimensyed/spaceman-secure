@@ -43,8 +43,7 @@ def unlock_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
     digitalWrite(buzzer, 1)
-    digitalWrite(led_green, 1)
-    setText(comm)
+    digitalWrite(led_red, 0)
 
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
@@ -52,6 +51,16 @@ def unlock_callback(client, userdata, message):
     digitalWrite(buzzer, 1)
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
+
+    while True:
+
+        setText(comm)
+        digitalWrite(led_green, 1)
+
+        button_status = digitalRead(button)
+        if button_status:
+            break
+
 
 
 #Custom callback to change display on lcd when the topic is updated
