@@ -54,7 +54,7 @@ def unlock_callback(client, userdata, message):
 
     while True:
 
-        setText(comm)
+        setText_norefresh(comm)
         digitalWrite(led_green, 1)
 
         button_status = digitalRead(button)
@@ -68,7 +68,7 @@ def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
     
-    setText(comm)
+    setText_norefresh(comm)
     digitalWrite(led_green, 0)
 
     while True:
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
         distance = ultrasonicRead(ultrasonic_ranger)
         digitalWrite(buzzer, 0)
-        setText("SYSTEM LOCKED")
+        setText_norefresh("SYSTEM LOCKED")
         digitalWrite(led_red, 1)
 
 
