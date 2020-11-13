@@ -47,7 +47,11 @@ def unlock_callback(client, userdata, message):
     digitalWrite(led_green, 1)
     setText(comm)
 
-    time.sleep(0.5)
+    time.sleep(0.1)
+    digitalWrite(buzzer, 0)
+    time.sleep(0.1)
+    digitalWrite(buzzer, 1)
+    time.sleep(0.1)
     digitalWrite(buzzer, 0)
 
 
@@ -63,7 +67,7 @@ def breach_callback(client, userdata, message):
 
         digitalWrite(buzzer, 1)
         digitalWrite(led_red, 1)
-        time.sleep(0.1)
+        time.sleep(0.5)
         digitalWrite(buzzer, 0)
         digitalWrite(led_red, 0)
 
@@ -92,6 +96,8 @@ if __name__ == '__main__':
 
                 digitalWrite(buzzer, 1)
                 client.publish("spaceman/button", "ACCESS REQUESTED")
+                time.sleep(0.1)
+                digitalWrite(buzzer, 0)
 
         else:
             
@@ -99,6 +105,6 @@ if __name__ == '__main__':
 
 
         time.sleep(1)
-        digitalWrite(buzzer, 0)
+        
             
 
