@@ -43,7 +43,7 @@ def on_message(client, userdata, msg):
 def unlock_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-
+    digitalWrite(buzzer, 1)
     digitalWrite(led_green, 1)
     setText(comm)
 
@@ -52,7 +52,7 @@ def unlock_callback(client, userdata, message):
 def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-
+    digitalWrite(buzzer, 1)
     digitalWrite(led_red, 1)
     setText(comm)
 
@@ -79,6 +79,7 @@ if __name__ == '__main__':
             button_status = digitalRead(button)
             if button_status:
 
+                digitalWrite(buzzer, 1)
                 client.publish("spaceman/button", "Button Pressed")
 
         else:
