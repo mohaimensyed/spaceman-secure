@@ -78,7 +78,12 @@ def breach_callback(client, userdata, message):
     digitalWrite(led_red, 1)
     
 
-    breach = True
+    while True:
+        digitalWrite(buzzer, 1)
+        digitalWrite(led_red, 1)
+        time.sleep(2)
+        digitalWrite(buzzer, 0)
+        digitalWrite(led_red, 0)
 
 
 
