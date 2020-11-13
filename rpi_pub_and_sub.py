@@ -115,6 +115,15 @@ if __name__ == '__main__':
 
 
         time.sleep(1)
+
+        except KeyboardInterrupt:   # Turn LED off before stopping
+            digitalWrite(led_red,0)
+            digitalWrite(led_red,0)
+            digitalWrite(buzzer,0)
+            break
+        
+        except IOError:             # Print "Error" if communication error encountered
+            print ("Error")
         
             
 
