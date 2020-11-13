@@ -15,7 +15,7 @@ def protect(fn):
     with lock:
         return fn()
 
-for BUS in [grovepi.bus,grove_rgb_lcd.bus]:
+for BUS in [grovepi.bus, grove_rgb_lcd.bus]:
     for k in dir(BUS):
         if sum(map(lambda x: x in k,['read','write','i2c'])):
             fn = BUS.__getattribute__(k)
