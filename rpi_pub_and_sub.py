@@ -14,14 +14,20 @@ led_green = 4
 led_red = 2
 buzzer = 5
 lock = True
+breach = False
 
-setRGB(0,255,0)
 
 pinMode(led_green, "OUTPUT")
 pinMode(led_red, "OUTPUT")
 pinMode(buzzer, "OUTPUT")
 pinMode(button, "INPUT")
 pinMode(ultrasonic_ranger, "INPUT")
+
+setRGB(0,255,0)
+digitalWrite(buzzer, 0)
+setText_norefresh("SYSTEM LOCKED")
+digitalWrite(led_red, 1)
+digitalWrite(led_green, 0)
 
 #on connect the rpi will subscribe to the led and lac topics
 def on_connect(client, userdata, flags, rc):
@@ -70,13 +76,7 @@ def breach_callback(client, userdata, message):
     digitalWrite(led_green, 0)
     setRGB(255,100,0)
 
-    while True:
-
-        digitalWrite(buzzer, 1)
-        digitalWrite(led_red, 0)
-        time.sleep(2)
-        digitalWrite(buzzer, 0)
-        digitalWrite(led_red, 0)
+    breach = True
 
 
 if __name__ == '__main__':
@@ -92,11 +92,9 @@ if __name__ == '__main__':
         try:
         
             #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
+            
             distance = ultrasonicRead(ultrasonic_ranger)
-            digitalWrite(buzzer, 0)
-            setText_norefresh("SYSTEM LOCKED")
-            digitalWrite(led_red, 1)
-            digitalWrite(led_green, 1)
+
 
 
             if distance <= 50:
@@ -116,6 +114,15 @@ if __name__ == '__main__':
 
             if lock == False:
                 break
+
+            elif breach == True:
+                while True:
+
+                    digitalWrite(buzzer, 1)
+                    digitalWrite(led_red, 0)
+                    time.sleep(2)
+                    digitalWrite(buzzer, 0)
+                    digitalWrite(led_red, 0)
 
 
             time.sleep(1)
