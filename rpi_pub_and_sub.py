@@ -13,6 +13,7 @@ ultrasonic_ranger = 3
 led_green = 4
 led_red = 2
 buzzer = 5
+lock = True
 
 setRGB(0,255,0)
 
@@ -52,14 +53,11 @@ def unlock_callback(client, userdata, message):
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
 
-    while True:
+    setRGB(0,100,255)
+    setText_norefresh(comm)
+    digitalWrite(led_green, 1)
 
-        setText_norefresh(comm)
-        digitalWrite(led_green, 1)
 
-        button_status = digitalRead(button)
-        if button_status:
-            break
 
 
 
@@ -70,6 +68,7 @@ def breach_callback(client, userdata, message):
     
     setText_norefresh(comm)
     digitalWrite(led_green, 0)
+    setRGB(255,100,0)
 
     while True:
 
@@ -97,9 +96,10 @@ if __name__ == '__main__':
             digitalWrite(buzzer, 0)
             setText_norefresh("SYSTEM LOCKED")
             digitalWrite(led_red, 1)
+            digitalWrite(led_green, 1)
 
 
-            if distance <= 70:
+            if distance <= 50:
         
                 #Alert Host
                 client.publish("spaceman/detector", distance)
@@ -114,13 +114,15 @@ if __name__ == '__main__':
                     digitalWrite(buzzer, 0)
 
 
+            if lock == False:
+                break
 
 
             time.sleep(1)
 
         except KeyboardInterrupt:   # Turn LED off before stopping
             digitalWrite(led_red,0)
-            digitalWrite(led_red,0)
+            digitalWrite(led_blue,0)
             digitalWrite(buzzer,0)
             break
         
