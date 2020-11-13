@@ -90,31 +90,33 @@ if __name__ == '__main__':
 
     while True:
 
-        #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
-        distance = ultrasonicRead(ultrasonic_ranger)
-        digitalWrite(buzzer, 0)
-        setText_norefresh("SYSTEM LOCKED")
-        digitalWrite(led_red, 1)
-
-
-        if distance <= 70:
+        try:
         
-            #Alert Host
-            client.publish("spaceman/detector", distance)
-
-            #when button is pressed, request access
-            button_status = digitalRead(button)
-            if button_status:
-
-                digitalWrite(buzzer, 1)
-                client.publish("spaceman/button", "ACCESS REQUESTED")
-                time.sleep(0.1)
-                digitalWrite(buzzer, 0)
+            #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
+            distance = ultrasonicRead(ultrasonic_ranger)
+            digitalWrite(buzzer, 0)
+            setText_norefresh("SYSTEM LOCKED")
+            digitalWrite(led_red, 1)
 
 
+            if distance <= 70:
+        
+                #Alert Host
+                client.publish("spaceman/detector", distance)
+
+                #when button is pressed, request access
+                button_status = digitalRead(button)
+                if button_status:
+
+                    digitalWrite(buzzer, 1)
+                    client.publish("spaceman/button", "ACCESS REQUESTED")
+                    time.sleep(0.1)
+                    digitalWrite(buzzer, 0)
 
 
-        time.sleep(1)
+
+
+            time.sleep(1)
 
         except KeyboardInterrupt:   # Turn LED off before stopping
             digitalWrite(led_red,0)
