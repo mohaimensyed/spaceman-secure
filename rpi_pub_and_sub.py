@@ -35,6 +35,8 @@ def on_connect(client, userdata, flags, rc):
 #default callback
 def on_message(client, userdata, msg):
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
+    setText("SYSTEM LOCKED")
+    digitalWrite(led_red, 1)
 
 
 #Custom callback for to turn the led on/off when the topic is updated

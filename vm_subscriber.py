@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 import time
 from pynput import keyboard
 
-password = "aliens=bruins"
+password = "a"
 
 
 def on_connect(client, userdata, flags, rc):
@@ -39,7 +39,7 @@ def button_callback(client, userdata, message):
     print(button)
     code = input("Enter password: ")
 
-    if code is password:
+    if code == password:
         
         client.publish("spaceman/unlock", "ACCESS GRANTED")
 
