@@ -8,25 +8,29 @@ import grovepi
 from grovepi import *
 from grove_rgb_lcd import *
 
-button = 2
+button = 6
 ultrasonic_ranger = 3
-led = 4
+led_green = 4
+led_red = 2
+buzzer = 5
 
 setRGB(0,255,0)
 
-pinMode(led, "OUTPUT")
+pinMode(led_green, "OUTPUT")
+pinMode(led_red, "OUTPUT")
+pinMode(buzzer, "OUTPUT")
 pinMode(button, "INPUT")
 pinMode(ultrasonic_ranger, "INPUT")
 
 #on connect the rpi will subscribe to the led and lac topics
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
-    client.subscribe("mohaimen")
+    client.subscribe("spaceman")
 
-    client.subscribe("mohaimen/led")
-    client.subscribe("mohaimen/lcd")
-    client.message_callback_add("mohaimen/led", led_callback)
-    client.message_callback_add("mohaimen/lcd", lcd_callback)
+    client.subscribe("spaceman/unlock")
+    client.subscribe("spaceman/breach")
+    client.message_callback_add("spaceman/unlock", unlock_callback)
+    client.message_callback_add("spaceman/breach", breach_callback)
 
 #default callback
 def on_message(client, userdata, msg):
@@ -34,20 +38,20 @@ def on_message(client, userdata, msg):
 
 
 #Custom callback for to turn the led on/off when the topic is updated
-def led_callback(client, userdata, message):
+def unlock_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
 
-    if comm == 'LED_ON':
-        digitalWrite(led, 1)
+    digitalWrite(led_green, 1)
+    setText(comm)
 
-    if comm == 'LED_OFF':
-        digitalWrite(led, 0)
 
 #Custom callback to change display on lcd when the topic is updated
-def lcd_callback(client, userdata, message):
+def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
+
+    digitalWrite(led_red, 1)
     setText(comm)
 
 
@@ -63,12 +67,22 @@ if __name__ == '__main__':
 
         #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
         distance = ultrasonicRead(ultrasonic_ranger)
-        client.publish("mohaimen/ultrasonicRanger", distance)
 
-        #when button is pressed, publishes the message on the button topic
-        button_status = digitalRead(button)
-        if button_status:
-            client.publish("mohaimen/button", "Button Pressed")
+        if distance <= 70:
+        
+            #Alert Host
+            client.publish("spaceman/detector", distance)
+
+            #when button is pressed, request access
+            button_status = digitalRead(button)
+            if button_status:
+
+                client.publish("spaceman/button", "Button Pressed")
+
+        else:
+            
+            client.publish("spaceman")
+
 
         time.sleep(1)
             
