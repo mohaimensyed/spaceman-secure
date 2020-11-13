@@ -30,10 +30,10 @@ pinMode(ultrasonic_ranger, "INPUT")
 
 with lock:
     setRGB(0,255,0)
-    digitalWrite(buzzer, 0)
-    setText_norefresh("SYSTEM LOCKED")
-    digitalWrite(led_red, 1)
-    digitalWrite(led_blue, 0)
+digitalWrite(buzzer, 0)
+setText_norefresh("SYSTEM LOCKED")
+digitalWrite(led_red, 1)
+digitalWrite(led_blue, 0)
 
 #on connect the rpi will subscribe to the led and lac topics
 def on_connect(client, userdata, flags, rc):
