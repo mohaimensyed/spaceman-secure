@@ -59,6 +59,7 @@ def unlock_callback(client, userdata, message):
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
 
+    lock = False
     setRGB(0,100,255)
     setText_norefresh(comm)
     digitalWrite(led_green, 1)
@@ -74,7 +75,7 @@ def breach_callback(client, userdata, message):
     
     setText_norefresh(comm)
     digitalWrite(led_green, 0)
-    setRGB(255,100,0)
+    setRGB(255, 0, 0)
 
     breach = True
 
@@ -115,7 +116,7 @@ if __name__ == '__main__':
             if lock == False:
                 break
 
-            elif breach == True:
+            if breach == True:
                 while True:
 
                     digitalWrite(buzzer, 1)
@@ -127,13 +128,14 @@ if __name__ == '__main__':
 
             time.sleep(1)
 
-        except KeyboardInterrupt:   # Turn LED off before stopping
+        
+        except KeyboardInterrupt:   # SHUTS OFF ALL OUTPUT
             digitalWrite(led_red,0)
             digitalWrite(led_blue,0)
             digitalWrite(buzzer,0)
             break
         
-        except IOError:             # Print "Error" if communication error encountered
+        except IOError:             # PrintS "Error" if communication error encountered
             print ("Error")
         
             
