@@ -10,7 +10,7 @@ from grove_rgb_lcd import *
 
 button = 6
 ultrasonic_ranger = 3
-led_green = 4
+led_blue = 4
 led_red = 2
 buzzer = 5
 lock = True
@@ -27,7 +27,7 @@ setRGB(0,255,0)
 digitalWrite(buzzer, 0)
 setText_norefresh("SYSTEM LOCKED")
 digitalWrite(led_red, 1)
-digitalWrite(led_green, 0)
+digitalWrite(led_blue, 0)
 
 #on connect the rpi will subscribe to the led and lac topics
 def on_connect(client, userdata, flags, rc):
@@ -62,7 +62,7 @@ def unlock_callback(client, userdata, message):
     lock = False
     setRGB(0,100,255)
     setText_norefresh(comm)
-    digitalWrite(led_green, 1)
+    digitalWrite(led_blue, 1)
 
 
 
@@ -72,12 +72,20 @@ def unlock_callback(client, userdata, message):
 def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-    
+    setRGB(255, 0, 0)
     setText_norefresh(comm)
     digitalWrite(led_green, 0)
-    setRGB(255, 0, 0)
+    digitalWrite(led_red, 1)
+    
 
     breach = True
+    while True:
+
+        digitalWrite(buzzer, 1)
+        digitalWrite(led_red, 1)
+        time.sleep(2)
+        digitalWrite(buzzer, 0)
+        digitalWrite(led_red, 0)
 
 
 if __name__ == '__main__':
@@ -120,7 +128,7 @@ if __name__ == '__main__':
                 while True:
 
                     digitalWrite(buzzer, 1)
-                    digitalWrite(led_red, 0)
+                    digitalWrite(led_red, 1)
                     time.sleep(2)
                     digitalWrite(buzzer, 0)
                     digitalWrite(led_red, 0)
