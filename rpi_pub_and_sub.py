@@ -18,7 +18,6 @@ ultrasonic_ranger = 3
 led_blue = 4
 led_red = 2
 buzzer = 5
-lock = True
 breach = False
 
 
@@ -66,7 +65,6 @@ def unlock_callback(client, userdata, message):
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
 
-    lock = False
     with lock:
         setRGB(0,100,255)
         setText_norefresh(comm)
@@ -124,10 +122,6 @@ if __name__ == '__main__':
                     time.sleep(0.1)
                     with lock:
                         digitalWrite(buzzer, 0)
-
-
-            if lock == False:
-                break
 
             if breach == True:
                 while True:
