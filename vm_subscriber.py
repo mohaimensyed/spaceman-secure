@@ -38,7 +38,8 @@ def button_callback(client, userdata, message):
     button = str(message.payload, "utf-8")
     print(button)
     code = input("Enter password: ")
-    if code == password:
+    
+    if code is password:
         client(client.publish("spaceman/unlock", "ACCESS GRANTED"))
 
     else:
