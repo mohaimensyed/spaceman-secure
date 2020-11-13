@@ -17,7 +17,7 @@ lock = True
 breach = False
 
 
-pinMode(led_green, "OUTPUT")
+pinMode(led_blue, "OUTPUT")
 pinMode(led_red, "OUTPUT")
 pinMode(buzzer, "OUTPUT")
 pinMode(button, "INPUT")
@@ -74,7 +74,7 @@ def breach_callback(client, userdata, message):
     comm = str(message.payload, "utf-8")
     setRGB(255, 0, 0)
     setText_norefresh(comm)
-    digitalWrite(led_green, 0)
+    digitalWrite(led_blue, 0)
     digitalWrite(led_red, 1)
     
 
