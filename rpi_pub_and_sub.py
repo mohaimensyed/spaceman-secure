@@ -35,8 +35,7 @@ def on_connect(client, userdata, flags, rc):
 #default callback
 def on_message(client, userdata, msg):
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
-    setText("SYSTEM LOCKED")
-    digitalWrite(led_red, 1)
+
 
 
 #Custom callback for to turn the led on/off when the topic is updated
@@ -67,7 +66,7 @@ def breach_callback(client, userdata, message):
 
         digitalWrite(buzzer, 1)
         digitalWrite(led_red, 1)
-        time.sleep(0.5)
+        time.sleep(1)
         digitalWrite(buzzer, 0)
         digitalWrite(led_red, 0)
 
@@ -84,6 +83,10 @@ if __name__ == '__main__':
 
         #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
         distance = ultrasonicRead(ultrasonic_ranger)
+        digitalWrite(buzzer, 0)
+        setText("SYSTEM LOCKED")
+        digitalWrite(led_red, 1)
+
 
         if distance <= 70:
         
@@ -99,9 +102,7 @@ if __name__ == '__main__':
                 time.sleep(0.1)
                 digitalWrite(buzzer, 0)
 
-        else:
-            
-            client.publish("spaceman")
+
 
 
         time.sleep(1)
