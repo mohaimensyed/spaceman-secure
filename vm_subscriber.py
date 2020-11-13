@@ -38,12 +38,14 @@ def button_callback(client, userdata, message):
     button = str(message.payload, "utf-8")
     print(button)
     code = input("Enter password: ")
-    
+
     if code is password:
-        client(client.publish("spaceman/unlock", "ACCESS GRANTED"))
+        
+        client.publish("spaceman/unlock", "ACCESS GRANTED")
 
     else:
-        client(client.publish("spaceman/breach", "SYSTEM BREACHED"))
+        
+        client.publish("spaceman/breach", "SYSTEM BREACHED")
 
 if __name__ == '__main__':
     #this section is covered in publisher_and_subscriber_example.py
