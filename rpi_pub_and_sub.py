@@ -7,9 +7,7 @@ import time
 import grovepi
 from grovepi import *
 from grove_rgb_lcd import *
-import threading 
 
-lock = threading.Lock()
 
 button = 6
 ultrasonic_ranger = 3
@@ -25,12 +23,11 @@ pinMode(buzzer, "OUTPUT")
 pinMode(button, "INPUT")
 pinMode(ultrasonic_ranger, "INPUT")
 
-with lock:
-    setRGB(0,255,0)
-    digitalWrite(buzzer, 0)
-    setText_norefresh("SYSTEM LOCKED")
-    digitalWrite(led_red, 1)
-    digitalWrite(led_blue, 0)
+setRGB(0,255,0)
+digitalWrite(buzzer, 0)
+setText_norefresh("SYSTEM LOCKED")
+digitalWrite(led_red, 1)
+digitalWrite(led_blue, 0)
 
 #on connect the rpi will subscribe to the led and lac topics
 def on_connect(client, userdata, flags, rc):
@@ -52,9 +49,8 @@ def on_message(client, userdata, msg):
 def unlock_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-    with lock:
-        digitalWrite(buzzer, 1)
-        digitalWrite(led_red, 0)
+    digitalWrite(buzzer, 1)
+    digitalWrite(led_red, 0)
 
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
@@ -63,10 +59,9 @@ def unlock_callback(client, userdata, message):
     time.sleep(0.1)
     digitalWrite(buzzer, 0)
 
-    with lock:
-        setRGB(0,100,255)
-        setText_norefresh(comm)
-        digitalWrite(led_blue, 1)
+    setRGB(0,100,255)
+    setText_norefresh(comm)
+    digitalWrite(led_blue, 1)
 
 
 
@@ -76,11 +71,11 @@ def unlock_callback(client, userdata, message):
 def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-    with lock:
-        setRGB(255, 0, 0)
-        setText_norefresh(comm)
-        digitalWrite(led_blue, 0)
-        digitalWrite(led_red, 1)
+
+    setRGB(255, 0, 0)
+    setText_norefresh(comm)
+    digitalWrite(led_blue, 0)
+    digitalWrite(led_red, 1)
     
 
     breach = True
@@ -100,10 +95,7 @@ if __name__ == '__main__':
         try:
         
             #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
-            with lock:
-                distance = ultrasonicRead(ultrasonic_ranger)
-
-
+            distance = ultrasonicRead(ultrasonic_ranger)
 
             if distance <= 50:
         
@@ -111,25 +103,20 @@ if __name__ == '__main__':
                 client.publish("spaceman/detector", distance)
 
                 #when button is pressed, request access
-                with lock:
-                    button_status = digitalRead(button)
+                button_status = digitalRead(button)
                 if button_status:
-                    with lock:
-                        digitalWrite(buzzer, 1)
+                    digitalWrite(buzzer, 1)
                     client.publish("spaceman/button", "ACCESS REQUESTED")
                     time.sleep(0.1)
-                    with lock:
-                        digitalWrite(buzzer, 0)
+                    digitalWrite(buzzer, 0)
 
             if breach == True:
                 while True:
-                    with lock:
-                        digitalWrite(buzzer, 1)
-                        digitalWrite(led_red, 1)
+                    digitalWrite(buzzer, 1)
+                    digitalWrite(led_red, 1)
                     time.sleep(2)
-                    with lock:
-                        digitalWrite(buzzer, 0)
-                        digitalWrite(led_red, 0)
+                    digitalWrite(buzzer, 0)
+                    digitalWrite(led_red, 0)
 
 
             time.sleep(1)
