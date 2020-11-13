@@ -47,14 +47,25 @@ def unlock_callback(client, userdata, message):
     digitalWrite(led_green, 1)
     setText(comm)
 
+    time.sleep(0.5)
+    digitalWrite(buzzer, 0)
+
 
 #Custom callback to change display on lcd when the topic is updated
 def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
-    digitalWrite(buzzer, 1)
-    digitalWrite(led_red, 1)
+    
     setText(comm)
+    digitalWrite(led_green, 0)
+
+    while True:
+
+        digitalWrite(buzzer, 1)
+        digitalWrite(led_red, 1)
+        time.sleep(0.1)
+        digitalWrite(buzzer, 0)
+        digitalWrite(led_red, 0)
 
 
 if __name__ == '__main__':
@@ -80,7 +91,7 @@ if __name__ == '__main__':
             if button_status:
 
                 digitalWrite(buzzer, 1)
-                client.publish("spaceman/button", "Button Pressed")
+                client.publish("spaceman/button", "ACCESS REQUESTED")
 
         else:
             
@@ -88,5 +99,6 @@ if __name__ == '__main__':
 
 
         time.sleep(1)
+        digitalWrite(buzzer, 0)
             
 
