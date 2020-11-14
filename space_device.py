@@ -1,12 +1,9 @@
-"""EE 250L Lab 04 Starter Code
 
-Run vm_subscriber.py in a separate terminal on your VM."""
-
+#LIBRARIES
 import paho.mqtt.client as mqtt
 import time
 from pynput import keyboard
 
-password = "a"
 
 
 def on_connect(client, userdata, flags, rc):
@@ -17,26 +14,28 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("spaceman/detector")
     client.subscribe("spaceman/button")
 
+
     client.message_callback_add("spaceman/detector", uRanger_callback)
     client.message_callback_add("spaceman/button", button_callback)
 
 
+#DEFAULT CALLBACK
 def on_message(client, userdata, msg):
     print("System Locked")
 
 
-#Custom callback to update the distance measurement read from the ultrasonic ranger on the rpi
+#NOTIFY CLIENT OF ALIENS NEARBY
 def uRanger_callback(client, userdata, message):
 
     distance = str(message.payload, "utf-8")
     print("Alien Nearby at " + distance + "cm")
 
 
-#Custom callback to indicate button is pressed on rpi
+#CALLBACK FOR WHEN BUTTON IS PRESSED AND ACCESS REQUESTED
 def button_callback(client, userdata, message):
 
-    button = str(message.payload, "utf-8")
-    print(button)
+    password = str(message.payload, "utf-8")
+    print("ACCESS REQUESTED")
     code = input("Enter password: ")
 
     if code == password:
@@ -46,6 +45,7 @@ def button_callback(client, userdata, message):
     else:
         
         client.publish("spaceman/breach", "SYSTEM BREACHED")
+        print("SYSTEM BREACHED")
 
 if __name__ == '__main__':
     #this section is covered in publisher_and_subscriber_example.py

@@ -1,21 +1,20 @@
-"""EE 250L Lab 04 Starter Code
 
-Run rpi_pub_and_sub.py on your Raspberry Pi."""
-
+#LIBRARIES 
 import paho.mqtt.client as mqtt
 import time
 import grovepi
 from grovepi import *
 from grove_rgb_lcd import *
 
+#PASSWORD USED TO GRANT ACCESS
+password = "aliensgotoucla"
 
-button = 6
+#ALL INPUT AND OUTPUT DEVICES
+led_red = 2
 ultrasonic_ranger = 3
 led_blue = 4
-led_red = 2
 buzzer = 5
-breach = False
-
+button = 6
 
 pinMode(led_blue, "OUTPUT")
 pinMode(led_red, "OUTPUT")
@@ -23,13 +22,14 @@ pinMode(buzzer, "OUTPUT")
 pinMode(button, "INPUT")
 pinMode(ultrasonic_ranger, "INPUT")
 
+#INITIAL STATE:
 setRGB(0,255,0)
 digitalWrite(buzzer, 0)
 setText_norefresh("SYSTEM LOCKED")
 digitalWrite(led_red, 0)
 digitalWrite(led_blue, 0)
 
-#on connect the rpi will subscribe to the led and lac topics
+#ON CONNECT SUBSCRIBES TO UNLOCK AND BREACH TOPICS
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     client.subscribe("spaceman")
@@ -39,13 +39,12 @@ def on_connect(client, userdata, flags, rc):
     client.message_callback_add("spaceman/unlock", unlock_callback)
     client.message_callback_add("spaceman/breach", breach_callback)
 
-#default callback
+#DEFAULT CALLBACK
 def on_message(client, userdata, msg):
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
 
 
-
-#Custom callback for to turn the led on/off when the topic is updated
+#CALLBACK USED WHEN DEVICE IS UNLOCKED
 def unlock_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
@@ -65,9 +64,7 @@ def unlock_callback(client, userdata, message):
 
 
 
-
-
-#Custom callback to change display on lcd when the topic is updated
+#CALLBACK USED WHEN THERE IS A BREACH
 def breach_callback(client, userdata, message):
 
     comm = str(message.payload, "utf-8")
@@ -89,7 +86,8 @@ def breach_callback(client, userdata, message):
 
 
 if __name__ == '__main__':
-    #this section is covered in publisher_and_subscriber_example.py
+    
+    #CREATES AN MQTT CLIENT AND CONNECTS TO eclipse.usc.edu at port 11000
     client = mqtt.Client()
     client.on_message = on_message
     client.on_connect = on_connect
@@ -100,7 +98,7 @@ if __name__ == '__main__':
 
         try:
         
-            #takes a reading from ultrasonic sensor ever 1s and publishes in the ultrasonicRanger topic
+            #TAKES READING FROM RANGER AND REPORTS IF OBJECT IS WITHIN 50cm
             distance = ultrasonicRead(ultrasonic_ranger)
 
             if distance <= 50:
@@ -112,17 +110,9 @@ if __name__ == '__main__':
                 button_status = digitalRead(button)
                 if button_status:
                     digitalWrite(buzzer, 1)
-                    client.publish("spaceman/button", "ACCESS REQUESTED")
+                    client.publish("spaceman/button", password)
                     time.sleep(0.1)
                     digitalWrite(buzzer, 0)
-
-            if breach == True:
-                while True:
-                    digitalWrite(buzzer, 1)
-                    digitalWrite(led_red, 1)
-                    time.sleep(2)
-                    digitalWrite(buzzer, 0)
-                    digitalWrite(led_red, 0)
 
 
             time.sleep(1)
