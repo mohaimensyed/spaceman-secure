@@ -26,7 +26,7 @@ pinMode(ultrasonic_ranger, "INPUT")
 setRGB(0,255,0)
 digitalWrite(buzzer, 0)
 setText_norefresh("SYSTEM LOCKED")
-digitalWrite(led_red, 1)
+digitalWrite(led_red, 0)
 digitalWrite(led_blue, 0)
 
 #on connect the rpi will subscribe to the led and lac topics
@@ -84,6 +84,7 @@ def breach_callback(client, userdata, message):
         time.sleep(2)
         digitalWrite(buzzer, 0)
         digitalWrite(led_red, 0)
+        time.sleep(2)
 
 
 
