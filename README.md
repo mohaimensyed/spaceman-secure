@@ -15,7 +15,7 @@ SPACEMAN SECURE is a security system that alerts subscribed clients when someone
 
 Check out our video demonstration of SPACEMAN SECURE in action:
 
-[SPACEMAN SECURE Demo Video](https://drive.google.com/file/d/REPLACE_THIS_WITH_ACTUAL_FILE_ID/view?usp=sharing)
+[SPACEMAN SECURE Demo Video](https://drive.google.com/file/d/1-Jd_WPspZ44pxXSH9nGhrXVuasNcjH1B/view?usp=sharing)
 
 ## Components
 
