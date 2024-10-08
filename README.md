@@ -79,4 +79,4 @@ Mohaimen Syed
 
 ## Note
 
-This project 
+This project was created as a demonstration of MQTT protocol usage and IoT security concepts. It is not intended for production use without further security enhancements.
