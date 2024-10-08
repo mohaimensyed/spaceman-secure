@@ -17,8 +17,6 @@ Check out our video demonstration of SPACEMAN SECURE in action:
 
 [SPACEMAN SECURE Demo Video](https://drive.google.com/file/d/REPLACE_THIS_WITH_ACTUAL_FILE_ID/view?usp=sharing)
 
-(Note: Replace "REPLACE_THIS_WITH_ACTUAL_FILE_ID" with the actual Google Drive file ID when uploading the video)
-
 ## Components
 
 - Raspberry Pi Model 3B+
